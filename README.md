@@ -1,1 +1,15 @@
 # redux-saga-course
+
+As a central store of state, Redux is intended to be used not only to store your state but to to be update-able from any part of your app, and to be able to in turn update any part of your app. State is just your app's centralized, persistent store of data. When we talk about state, we often ask; "what is the current state of my application's data?"
+
+Redux saga is a 3rd party library which handles any application side effects, like data fetching and acting as an intermediary between states (we can use it to implement a state-machine-like flow of information in our application).
+
+Sagas can be super useful if your app incorporates third-party vendor logic; for example, if you are building a web app and you have a third-party vendor which handles user information (and supplies your application with various pre-built components to access and update this user info.) A common pattern would be to build an event emitter which 'emits' useful information or data any time the vendor's functionality is utilized.
+
+Your job is to make sure that any events coming from your third party are piped through redux - then you can listen for fired actions in your sagas. In general, this is a better pattern than creating local event listeners because of the granularity of control you get with sagas, which are built on es6 generators.
+
+The way generators work, in a nutshell: they are basically just functions that can be paused, and continued, ad infinitum. The precision you get of your data control flow allows you to very easily handle complex asynchronous logic. And because of saga's clearly defined API (read the docs!) using sagas makes your code very easily testable.
+
+One pattern I tend to use with sagas is building a state-machine-like flow of state updates; a user makes a change in the UI (for example clicking a login button, which opens a login modal). This creates an action like "LOGIN_STARTED" which is passed through redux and may or may not be used. You can create a default "Auth" saga which hooks into the redux store and listens for "LOGIN_STARTED". When it 'catches' this fired action, it can either continue on to some other logic within the game generator function, or call another function. Either way, it may then wait (and listen) for another user action, this time either 'CHECKING_LOGIN' or 'LOGIN_ABORTED' if they exit the modal. Then upon auth resolution or rejection, 'LOGIN_SUCCESS' or 'LOGIN_FAILURE' is fired, and your saga can perform some additional logic. So a typical success login flow may be 'AUTH_COMPONENT_INITIALIZED -> LOGIN_STARTED -> CHECKING_LOGIN -> LOGIN_SUCCESS.
+
+Think of a state machine like a traffic light; there are 3 distinct 'states' that it could be in, and each has its own logic about when it may be the 'on' state, for example, yellow must follow green, red must follow yellow, green must follow red. In the same way, you can build out your application's state control flow with clearly defined pre-requirements that must be met in order to progress to the next stage. 
