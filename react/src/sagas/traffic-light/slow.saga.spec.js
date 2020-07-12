@@ -16,6 +16,10 @@ describe("Slow saga", () => {
     test("creates TRAFFIC_LIGHT.GO action", () => {
       expect(generator.next().value).toEqual(put({ type: TRAFFIC_LIGHT.GO }));
     });
+
+    test('puts SEQUENCE_PAUSED', () => {
+      expect(generator.next().value).toEqual(put({ type: TRAFFIC_LIGHT.SEQUENCE_PAUSED }));
+    });
   });
 
   describe("slowTraffic", () => {

@@ -21,6 +21,10 @@ describe("Stop saga", () => {
   describe("haltTraffic", () => {
     const generator = cloneableGenerator(haltTraffic)();
 
+    test('puts action SEQUENCE_INITIATED', () => {
+      expect(generator.next().value).toEqual(put({ type: TRAFFIC_LIGHT.SEQUENCE_INITIATED }));
+    });
+
     test("calls sleep util for 4 seconds", () => {
       expect(generator.next().value).toEqual(call(sleep, 4));
     });
